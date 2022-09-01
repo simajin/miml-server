@@ -1,0 +1,7 @@
+{
+    "host": "miml.csttfuyo9u6w.us-west-1.rds.amazonaws.com",
+    "user": "admin",
+    "password": "dkwls123",
+    "port": "3306",
+    "database": "music"
+}
