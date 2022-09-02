@@ -102,13 +102,12 @@ app.post('/login', async(req, res) => {
                 if(rows[0] == undefined) {
                     res.send("1번실패")
                 }else {
-                    bcrypt.compare(password, rows[0].password, function(err, flag) {
-                        if(flag == true) {
-                            res.send(rows[0])
-                        }else {
-                            res.send("2번실패");
-                        }
-                    });
+                    const check = bcrypt.compare(password, rows[0].password)
+                    if(check) {
+                        res.send(rows[0])
+                    }else {
+                        console.log("2번실패")
+                    }
                 }
             }else {
                 res.send("3번실패");
