@@ -127,12 +127,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 100000 }
+    limits: { fileSize: 10000000 }
 });
 
 app.post("/upload", upload.single("imgsrc"), function(req, res, next) {
     res.send({
-        imgsrc: 'images/'+req.file.filename
+        imgsrc: 'images/'+ req.file.filename
     })
     console.log(req.file.filename)
 })
