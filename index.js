@@ -8,6 +8,7 @@ const parseData = JSON.parse(dataj);
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const multer = require("multer");
 
 app.use(express.json());
 app.use(cors());
@@ -113,6 +114,44 @@ app.post('/login', async(req, res) => {
                 res.send("3번실패");
             }
         }
+    )
+})
+
+// 서버폴더에 이미지 저장
+const storage = multer.diskStorage({
+    destination: "./upload",
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 100000 }
+});
+
+app.post("/upload", upload.single("imgsrc"), function(req, res, next) {
+    res.send({
+        imgsrc: 'images/'+req.file.filename
+    })
+    console.log(req.file.filename)
+})
+// 서버로 업로드한 이미지에 접근할 수 있도록 upload폴더 사용
+app.use("/upload", express.static("upload"));
+
+// 상품등록
+app.post('/uploadElbum', async(req, res) => {
+    const { artistname, elbumname, price, saleprice, type, elbumdate, imgsrc, descimg } = req.body;
+    connection.query("INSERT INTO elbum(`artistname`,`elbumname`,`price`,`saleprice`,`type`,`elbumdate`,`imgsrc`,`descimg`) values(?,?,?,?,?,?,?,?)",
+    [ artistname, elbumname, price, saleprice, type, elbumdate, imgsrc, descimg ],
+    (err, result, fields) => {
+        if(result) {
+            console.log(result);
+            res.send("상품등록이 완료되었습니다")
+        }else {
+            console.log("실패")
+        }
+    }
     )
 })
 
